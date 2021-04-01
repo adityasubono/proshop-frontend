@@ -1,56 +1,45 @@
-import React, {Fragment, useEffect} from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { Fragment, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Navbar from './components/layout/Navbar';
+import Landing from './components/layout/Landing';
+import Routes from './components/routing/Routes';
+import { LOGOUT } from './actions/types';
+
+// Redux
+import { Provider } from 'react-redux';
+import store from './store';
+import { loadUser } from './actions/auth';
+import setAuthToken from './utils/setAuthToken';
 
 import './App.css';
-import Navbar from "./component/layout/Navbar";
-import Landing from "./component/layout/Landing";
-import Register from "./component/auth/Register";
-import Login from "./component/auth/Login";
-import Alert from "./component/layout/Alert";
-import { loadUser } from "./actions/auth";
-import Dashboard from "./component/dashboard/Dashboard";
-import PrivateRoute from "./component/routing/PrivateRoute";
-
-
-//Redux
-import { Provider } from "react-redux";
-import store from './store';
-import setAuthToken from "./utils/setAuthToken";
-
-if(localStorage.token) {
-    setAuthToken(localStorage.token);
-}
-
 
 const App = () => {
-
     useEffect(() => {
+        // check for token in LS
+        if (localStorage.token) {
+            setAuthToken(localStorage.token);
+        }
         store.dispatch(loadUser());
+
+        // log user out from all tabs if they log out in one tab
+        window.addEventListener('storage', () => {
+            if (!localStorage.token) store.dispatch({ type: LOGOUT });
+        });
     }, []);
 
-
-
     return (
-    <Provider store={store}>
-        <Router>
-            <Fragment>
-                <Navbar/>
-                <Route exact path='/' component={Landing}/>
-                <section className='container'>
-                    <Alert/>
+        <Provider store={store}>
+            <Router>
+                <Fragment>
+                    <Navbar />
                     <Switch>
-                        <Route exact path={'/register'} component={Register}/>
-                        <Route exact path={'/login'} component={Login}/>
-                        <PrivateRoute exact path={'/dashboard'} component={Dashboard}/>
+                        <Route exact path="/" component={Landing} />
+                        <Route component={Routes} />
                     </Switch>
-                </section>
-            </Fragment>
-        </Router>
-    </Provider>
-)};
-
-
-
-
+                </Fragment>
+            </Router>
+        </Provider>
+    );
+};
 
 export default App;

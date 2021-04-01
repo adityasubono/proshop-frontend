@@ -70,6 +70,13 @@ img {
   color: var(--primary-color);
 }
 
+.text-danger {
+  color: var(--danger-color);
+}
+.text-bold {
+  font-weight: bold;
+}
+
 .text-dark {
   color: var(--dark-color);
 }

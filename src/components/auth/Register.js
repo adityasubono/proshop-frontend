@@ -1,10 +1,9 @@
-import React, {Fragment, useState} from 'react';
-import { connect } from "react-redux";
-import { setAlert } from "../../actions/alert";
+import React, { Fragment, useState } from 'react';
+import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { register } from "../../actions/auth";
+import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
-
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
     const [formData, setFormData] = useState({
@@ -24,16 +23,12 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         if (password !== password2) {
             setAlert('Passwords do not match', 'danger');
         } else {
-            register({
-                name, email, password
-            });
+            register({ name, email, password });
         }
-
     };
 
-
-    if(isAuthenticated) {
-        return <Redirect to='/dashboard' />
+    if (isAuthenticated) {
+        return <Redirect to="/dashboard" />;
     }
 
     return (
@@ -49,7 +44,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                         placeholder="Name"
                         name="name"
                         value={name}
-                        onChange={e => onChange(e)}
+                        onChange={onChange}
                     />
                 </div>
                 <div className="form-group">
@@ -58,7 +53,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                         placeholder="Email Address"
                         name="email"
                         value={email}
-                        onChange={e => onChange(e)}
+                        onChange={onChange}
                     />
                     <small className="form-text">
                         This site uses Gravatar so if you want a profile image, use a
@@ -71,7 +66,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                         placeholder="Password"
                         name="password"
                         value={password}
-                        onChange={e => onChange(e)}
+                        onChange={onChange}
                     />
                 </div>
                 <div className="form-group">
@@ -80,7 +75,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                         placeholder="Confirm Password"
                         name="password2"
                         value={password2}
-                        onChange={e => onChange(e)}
+                        onChange={onChange}
                     />
                 </div>
                 <input type="submit" className="btn btn-primary" value="Register" />
@@ -96,9 +91,9 @@ Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool
-}
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
